@@ -4,6 +4,7 @@ import com.vini.tickets.domain.CreateEventRequest;
 import com.vini.tickets.domain.UpdateEventRequest;
 import com.vini.tickets.domain.UpdateTicketTypeRequest;
 import com.vini.tickets.domain.entities.Event;
+import com.vini.tickets.domain.entities.EventStatusEnum;
 import com.vini.tickets.domain.entities.TicketType;
 import com.vini.tickets.domain.entities.User;
 import com.vini.tickets.exceptions.EventNotFoundException;
@@ -137,5 +138,16 @@ public class EventServiceImpl implements EventService {
         }
 
         return eventRepository.save(existingEvent);
+    }
+
+    @Override
+    @Transactional
+    public void deleteEventForOrganizer(UUID organizerId, UUID id) {
+        getEventForOrganizer(organizerId, id).ifPresent(eventRepository::delete);
+    }
+
+    @Override
+    public Page<Event> listPublishedEvents(Pageable pageable) {
+        return eventRepository.findByStatus(EventStatusEnum.PUBLISHED, pageable);
     }
 }
