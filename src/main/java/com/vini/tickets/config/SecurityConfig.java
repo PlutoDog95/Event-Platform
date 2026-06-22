@@ -21,7 +21,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize ->
                         // All requests must be authenticated
                         authorize
-                                .requestMatchers(HttpMethod.GET, "/api/v1/published-events").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/published-events/**").permitAll()
                                 .anyRequest().authenticated())
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session ->
