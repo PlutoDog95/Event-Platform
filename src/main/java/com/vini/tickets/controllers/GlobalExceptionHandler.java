@@ -1,10 +1,7 @@
 package com.vini.tickets.controllers;
 
 import com.vini.tickets.domain.dtos.ErrorDto;
-import com.vini.tickets.exceptions.EventNotFoundException;
-import com.vini.tickets.exceptions.EventUpdateException;
-import com.vini.tickets.exceptions.TicketTypeNotFoundException;
-import com.vini.tickets.exceptions.UserNotFoundException;
+import com.vini.tickets.exceptions.*;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,6 +17,14 @@ import java.util.List;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(QrCodeGenerationException.class)
+    public ResponseEntity<ErrorDto> handleQrCodeGenerationException(QrCodeGenerationException ex) {
+        log.error("Caught QrCodeGenerationException", ex);
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setError("Unable to generate QR Code");
+        return new ResponseEntity<>(errorDto, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     @ExceptionHandler(EventUpdateException.class)
     public ResponseEntity<ErrorDto> handleEventUpdateException(EventUpdateException ex) {
